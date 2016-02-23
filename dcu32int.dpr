@@ -28,7 +28,8 @@ freely, subject to the following restrictions:
 //  {$IFNDEF LINUX}Windows,{$ELSE}LinuxFix,{$ENDIF}
 
 uses
-  SysUtils,{$IFDEF UNICODE}AnsiStrings,{$ENDIF}
+  SysUtils, {$IFDEF UNICODE}
+  AnsiStrings, {$ENDIF}
   DCU32 in 'DCU32.pas',
   DCUTbl in 'DCUTbl.pas',
   DCU_In in 'DCU_In.pas',
@@ -45,194 +46,237 @@ uses
 
 procedure WriteUsage;
 begin
-  Writeln(
-  'Usage:'#13#10+
-  '  DCU32INT <Source file> <Flags> [<Destination file>]'#13#10+
-  'Source file - DCU(DPU,DCUIL) or Package (DCP,DCPIL) file'#13#10+
-  'Destination file may contain * to be replaced by unit name or name and extension'#13#10+
-  'Destination file = "-" => write to stdout.'#13#10+
+  Writeln('Usage:'#13#10
+  + '  DCU32INT <Source file> <Flags> [<Destination file>]'#13#10
+  + 'Source file - DCU(DPU,DCUIL) or Package (DCP,DCPIL) file'#13#10
+  + 'Destination file may contain * to be replaced by unit name or name and extension'#13#10
+  + 'Destination file = "-" => write to stdout.'#13#10 +
  {$IFNDEF LINUX}
-  'Flags (start with "/" or "-"):'#13#10+
+    'Flags (start with "/" or "-"):'#13#10 +
  {$ELSE}
-  'Flags (start with "-"):'#13#10+
+    'Flags (start with "-"):'#13#10 +
  {$ENDIF}
-  ' -S<show flag>* - Show flags (-S - show all), default: (+) - on, (-) - off'#13#10+
-  '    A(-) - show Address table'#13#10+
-  '    C(-) - don''t resolve Constant values'#13#10+
-  '    D(-) - show Data block'#13#10+
-  '    d(-) - show dot types'#13#10+
-  '    F(-) - show Fixups'#13#10+
-  '    H(+) - show Heuristic strings'#13#10+
-  '    I(+) - show Imported names'#13#10+
-  '    L(-) - show table of Local variables'#13#10+
-  '    M(-) - don''t resolve class Methods'#13#10+
-  '    O(-) - show file Offsets'#13#10+
-  '    S(-) - show Self arguments of methods and 2nd call flags of `structors'#13#10+
-  '    T(-) - show Type table'#13#10+
-  '    U(-) - show Units of imported names'#13#10+
-  '    V(-) - show auxiliary Values'#13#10+
-  '    v(-) - show VMT'#13#10+
-  ' -O<option>* - code generation options, default: (+) - on, (-) - off'#13#10+
-  '    V(-) - typed constants as Variables'#13#10+
-  '    S(-) - check unit Stamps'#13#10+
-  ' -I - interface part only'#13#10+
-  ' -U<paths> - Unit directories, * means autodetect by unit version'#13#10+
-  ' -P<paths> - Pascal source directories (just "-P" means: "seek for *.pas in'#13#10+
-  '    the unit directory"). Without this parameter src lines won''t be reported'#13#10+
-  ' -R<Alias>=<unit>[;<Alias>=<unit>]* - set unit aliases'#13#10+
-  ' -N<Prefix> - No Name Prefix ("%" - Scope char)'#13#10+
-  ' -F<FMT> - output format (T - text (default), H-HTML)'#13#10+
-  ' -D<Prefix> - Dot Name Prefix ("%" - Scope char)'#13#10+
-  ' -Q<Query flag> - Query additional information.'#13#10+
-  '    F(-) - class fields'#13#10+
-  '    V(-) - class virtual methods'#13#10+
-  ' -A<Mode> - disAssembler mode'#13#10+
-  '    S(+) - simple Sequential (all memory is a sequence of ops)'#13#10+
-  '    C(-) - control flow'#13#10
-  );
-end ;
+    ' -S<show flag>* - Show flags (-S - show all), default: (+) - on, (-) - off'#13#10
+    + '    A(-) - show Address table'#13#10
+    + '    C(-) - don''t resolve Constant values'#13#10
+    + '    D(-) - show Data block'#13#10
+    + '    d(-) - show dot types'#13#10
+    + '    F(-) - show Fixups'#13#10
+    + '    H(+) - show Heuristic strings'#13#10
+    + '    I(+) - show Imported names'#13#10
+    + '    L(-) - show table of Local variables'#13#10
+    + '    M(-) - don''t resolve class Methods'#13#10
+    + '    O(-) - show file Offsets'#13#10
+    + '    S(-) - show Self arguments of methods and 2nd call flags of `structors'#13#10
+    + '    T(-) - show Type table'#13#10
+    + '    U(-) - show Units of imported names'#13#10
+    + '    V(-) - show auxiliary Values'#13#10
+    + '    v(-) - show VMT'#13#10
+    + ' -O<option>* - code generation options, default: (+) - on, (-) - off'#13#10
+    + '    V(-) - typed constants as Variables'#13#10 + '    S(-) - check unit Stamps'#13#10
+    + ' -I - interface part only'#13#10
+    + ' -U<paths> - Unit directories, * means autodetect by unit version'#13#10
+    + ' -P<paths> - Pascal source directories (just "-P" means: "seek for *.pas in'#13#10
+    + '    the unit directory"). Without this parameter src lines won''t be reported'#13#10
+    + ' -R<Alias>=<unit>[;<Alias>=<unit>]* - set unit aliases'#13#10
+    + ' -N<Prefix> - No Name Prefix ("%" - Scope char)'#13#10
+    + ' -F<FMT> - output format (T - text (default), H-HTML)'#13#10
+    + ' -D<Prefix> - Dot Name Prefix ("%" - Scope char)'#13#10
+    + ' -o<File> - Output file'
+    + ' -Q<Query flag> - Query additional information.'#13#10
+    + '    F(-) - class fields'#13#10
+    + '    V(-) - class virtual methods'#13#10
+    + ' -A<Mode> - disAssembler mode'#13#10
+    + '    S(+) - simple Sequential (all memory is a sequence of ops)'#13#10
+    + '    C(-) - control flow'#13#10);
+end;
 
 const
-  DCUName: String = '';
-  FNRes: String = '';
+  DCUName: string = '';
+  FNRes: string = '';
 
 { Queries: }
 type
-  TQueryFlag = (qfFields,qfVMT);
+  TQueryFlag = (qfFields, qfVMT);
+
   TQueryFlags = set of TQueryFlag;
 
 const
-  qfAll = [Low(TQueryFlag)..High(TQueryFlag)];
+  qfAll =[Low(TQueryFlag)..High(TQueryFlag)];
 
 var
-  Queries: TQueryFlags=[];
+  Queries: TQueryFlags = [];
 
 function ProcessParms: boolean;
 var
-  i,j: integer;
-  PS: String;
+  i, j: integer;
+  PS: string;
   Ch: Char;
 begin
   Result := false;
-  for i:=1 to ParamCount do begin
+  for i := 1 to ParamCount do
+  begin
     PS := ParamStr(i);
-    if (Length(PS)>1)and({$IFNDEF LINUX}(PS[1]='/')or{$ENDIF}(PS[1]='-')) then begin
+    if (Length(PS) > 1) and ({$IFNDEF LINUX}(PS[1] = '/') or {$ENDIF}(PS[1] = '-')) then
+    begin
       Ch := UpCase(PS[2]);
       case Ch of
-        'H','?': begin
-          WriteUsage;
-          Exit;
-         end ;
-        'S': begin
-          if Length(PS)=2 then
-            SetShowAll
-          else begin
-            for j:=3 to Length(PS) do begin
-              Ch := {UpCase(}PS[j]{)};
-              case Ch of
-                'A': ShowAddrTbl := true;
-                'C': ResolveConsts := false;
-                'D': ShowDataBlock := true;
-                'd': ShowDotTypes := true;
-                'F': ShowFixupTbl := true;
-                'H': ShowHeuristicRefs := false;
-                'I': ShowImpNames := false;
-                'L': ShowLocVarTbl := true;
-                'M': ResolveMethods := false;
-                'O': ShowFileOffsets := true;
-                'S': ShowSelf := true;
-                'T': ShowTypeTbl := true;
-                'U': ShowImpNamesUnits := true;
-                'V': ShowAuxValues := true;
-                'v': ShowVMT := true;
-              else
-                Writeln('Unknown show flag: "',Ch,'"');
-                Exit;
-              end ;
-            end ;
-          end ;
-        end ;
-        'Q': begin
-          if Length(PS)=2 then
-            Queries := qfAll
-          else begin
-            Queries := [];
-            for j:=3 to Length(PS) do begin
-              Ch := {UpCase(}PS[j]{)};
-              case Ch of
-               'F': Include(Queries,qfFields);
-               'V': Include(Queries,qfVMT);
-              else
-                Writeln('Unknown query flag: "',Ch,'"');
-                Exit;
-              end ;
-            end ;
-          end ;
-        end ;
+        'H', '?':
+          begin
+            WriteUsage;
+            Exit;
+          end;
+        'S':
+          begin
+            if Length(PS) = 2 then
+              SetShowAll
+            else
+            begin
+              for j := 3 to Length(PS) do
+              begin
+                Ch := {UpCase(}PS[j]{)};
+                case Ch of
+                  'A':
+                    ShowAddrTbl := true;
+                  'C':
+                    ResolveConsts := false;
+                  'D':
+                    ShowDataBlock := true;
+                  'd':
+                    ShowDotTypes := true;
+                  'F':
+                    ShowFixupTbl := true;
+                  'H':
+                    ShowHeuristicRefs := false;
+                  'I':
+                    ShowImpNames := false;
+                  'L':
+                    ShowLocVarTbl := true;
+                  'M':
+                    ResolveMethods := false;
+                  'O':
+                    ShowFileOffsets := true;
+                  'S':
+                    ShowSelf := true;
+                  'T':
+                    ShowTypeTbl := true;
+                  'U':
+                    ShowImpNamesUnits := true;
+                  'V':
+                    ShowAuxValues := true;
+                  'v':
+                    ShowVMT := true;
+                else
+                  Writeln('Unknown show flag: "', Ch, '"');
+                  Exit;
+                end;
+              end;
+            end;
+          end;
+        'Q':
+          begin
+            if Length(PS) = 2 then
+              Queries := qfAll
+            else
+            begin
+              Queries := [];
+              for j := 3 to Length(PS) do
+              begin
+                Ch := {UpCase(}PS[j]{)};
+                case Ch of
+                  'F':
+                    Include(Queries, qfFields);
+                  'V':
+                    Include(Queries, qfVMT);
+                else
+                  Writeln('Unknown query flag: "', Ch, '"');
+                  Exit;
+                end;
+              end;
+            end;
+          end;
         'O':
-          for j:=3 to Length(PS) do begin
+          for j := 3 to Length(PS) do
+          begin
             Ch := {UpCase(}PS[j]{)};
             case Ch of
-              'V': GenVarCAsVars := true;
-              'S': IgnoreUnitStamps := false;
+              'V':
+                GenVarCAsVars := true;
+              'S':
+                IgnoreUnitStamps := false;
             else
-              Writeln('Unknown code generation option: "',Ch,'"');
+              Writeln('Unknown code generation option: "', Ch, '"');
               Exit;
-            end ;
-          end ;
-        'I': InterfaceOnly := true;
-        'U': begin
-          Delete(PS,1,2);
-          DCUPath := PS;
-        end ;
-        'R': begin
-          Delete(PS,1,2);
-          SetUnitAliases(PS);
-        end ;
-        'P': begin
-          Delete(PS,1,2);
-          PASPath := PS;
-        end ;
-        'N': begin
-          Delete(PS,1,2);
-          NoNamePrefix := PS;
-        end ;
-        'D': begin
-          Delete(PS,1,2);
-          DotNamePrefix := PS;
-        end ;
-        'A': begin
-           if Length(PS)=2 then
-             Ch := 'C'
-           else
-             Ch := UpCase(PS[3]);
-           case Ch of
-            'S': DasmMode := dasmSeq;
-            'C': DasmMode := dasmCtlFlow;
-           else
-             Writeln('Unknown disassembler mode: "',Ch,'"');
-             Exit;
-           end ;
-        end ;
-        'F': begin
-          if (Length(PS)>2)and(UpCase(PS[3])='H') then
-            OutFmt := ofmtHTM;
-        end ;
+            end;
+          end;
+        'I':
+          InterfaceOnly := true;
+        'X':
+          begin
+            Delete(PS, 1, 2);
+            FOutPutFile := PS;
+          end;
+        'U':
+          begin
+            Delete(PS, 1, 2);
+            DCUPath := PS;
+          end;
+        'R':
+          begin
+            Delete(PS, 1, 2);
+            SetUnitAliases(PS);
+          end;
+        'P':
+          begin
+            Delete(PS, 1, 2);
+            PASPath := PS;
+          end;
+        'N':
+          begin
+            Delete(PS, 1, 2);
+            NoNamePrefix := PS;
+          end;
+        'D':
+          begin
+            Delete(PS, 1, 2);
+            DotNamePrefix := PS;
+          end;
+        'A':
+          begin
+            if Length(PS) = 2 then
+              Ch := 'C'
+            else
+              Ch := UpCase(PS[3]);
+            case Ch of
+              'S':
+                DasmMode := dasmSeq;
+              'C':
+                DasmMode := dasmCtlFlow;
+            else
+              Writeln('Unknown disassembler mode: "', Ch, '"');
+              Exit;
+            end;
+          end;
+        'F':
+          begin
+            if (Length(PS) > 2) and (UpCase(PS[3]) = 'H') then
+              OutFmt := ofmtHTM;
+          end;
       else
-        Writeln('Unknown flag: "',Ch,'"');
+        Writeln('Unknown flag: "', Ch, '"');
         Exit;
-      end ;
+      end;
       Continue;
-    end ;
-    if DCUName='' then
+    end;
+    if DCUName = '' then
       DCUName := PS
-    else if FNRes='' then
+    else if FNRes = '' then
       FNRes := PS
     else
       Exit;
-  end ;
-  Result := DCUName<>'';
-end ;
+  end;
+  Result := DCUName <> '';
+end;
 
 procedure QueryUnit(U: TUnit; Queries: TQueryFlags);
 { Output information to simplify disassembly analysis}
@@ -240,26 +284,30 @@ procedure QueryUnit(U: TUnit; Queries: TQueryFlags);
   function ShowFields(U1: TUnit; Hdr: AnsiString; F: TDCURec{TNameDecl}): Boolean;
   begin
     Result := false;
-    while F<>Nil do begin
-      if (F is TLocalDecl)and(F.GetTag=arFld) then begin
-        if not Result then begin
+    while F <> Nil do
+    begin
+      if (F is TLocalDecl) and (F.GetTag = arFld) then
+      begin
+        if not Result then
+        begin
           Result := true;
-          if Hdr<>'' then begin
+          if Hdr <> '' then
+          begin
             Writer.NLOfs := 4;
             NL;
             PutS(Hdr);
-          end ;
+          end;
           Writer.NLOfs := 6;
-        end ;
+        end;
         NL;
-        PutSFmt('@%d=$%0:x ',[TLocalDecl(F).Ndx]);
+        PutSFmt('@%d=$%0:x ', [TLocalDecl(F).Ndx]);
         PutS(F.Name^.GetStr);
         PutS(': ');
-        U1.ShowTypeDef(TLocalDecl(F).hDT,Nil);
-      end ;
+        U1.ShowTypeDef(TLocalDecl(F).hDT, Nil);
+      end;
       F := {TNameDecl}(F.Next);
-    end ;
-  end ;
+    end;
+  end;
 
   function ShowParentFields(U1: TUnit; hParent: TNDX): Boolean;
   var
@@ -267,42 +315,45 @@ procedure QueryUnit(U: TUnit; Queries: TQueryFlags);
     U2: TUnit;
   begin
     Result := false;
-    TD := U1.GetGlobalTypeDef(hParent,U2);
-    if TD=Nil then
+    TD := U1.GetGlobalTypeDef(hParent, U2);
+    if TD = Nil then
       Exit;
-    if not(TD is TRecBaseDef) then
+    if not (TD is TRecBaseDef) then
       Exit;
-    if TD is TOOTypeDef then begin
-      if ShowParentFields(U2,TOOTypeDef(TD).hParent) then
+    if TD is TOOTypeDef then
+    begin
+      if ShowParentFields(U2, TOOTypeDef(TD).hParent) then
         Result := true;
-    end ;
-    if ShowFields(U2,TD.Name^.GetStr,TRecBaseDef(TD).Fields) then
+    end;
+    if ShowFields(U2, TD.Name^.GetStr, TRecBaseDef(TD).Fields) then
       Result := true;
-  end ;
+  end;
 
   function ShowMethods(U1: TUnit; Hdr: AnsiString; F: TDCURec{TNameDecl}): Boolean;
   begin
     Result := false;
-    while F<>Nil do begin
-      if (F is TMethodDecl)and(TMethodDecl(F).LocFlags and lfMethodKind in [lfVirtual])
-        and(TMethodDecl(F).LocFlags and lfOverride=0{Don't show it again})
-      then begin
-        if not Result then begin
+    while F <> Nil do
+    begin
+      if (F is TMethodDecl) and (TMethodDecl(F).LocFlags and lfMethodKind in [lfVirtual]) and (TMethodDecl(F).LocFlags and lfOverride = 0{Don't show it again}) then
+      begin
+        if not Result then
+        begin
           Result := true;
-          if Hdr<>'' then begin
+          if Hdr <> '' then
+          begin
             Writer.NLOfs := 4;
             NL;
             PutS(Hdr);
-          end ;
+          end;
           Writer.NLOfs := 6;
-        end ;
+        end;
         NL;
-        PutSFmt('[%d=$%0:x] ',[TLocalDecl(F).hDT*4]);
+        PutSFmt('[%d=$%0:x] ', [TLocalDecl(F).hDT * 4]);
         PutS(F.Name^.GetStr);
-      end ;
+      end;
       F := TNameDecl(F.Next);
-    end ;
-  end ;
+    end;
+  end;
 
   function ShowParentMethods(U1: TUnit; hParent: TNDX): Boolean;
   var
@@ -310,16 +361,16 @@ procedure QueryUnit(U: TUnit; Queries: TQueryFlags);
     U2: TUnit;
   begin
     Result := false;
-    TD := U1.GetGlobalTypeDef(hParent,U2);
-    if TD=Nil then
+    TD := U1.GetGlobalTypeDef(hParent, U2);
+    if TD = Nil then
       Exit;
-    if not(TD is TOOTypeDef) then
+    if not (TD is TOOTypeDef) then
       Exit;
-    if ShowParentMethods(U2,TOOTypeDef(TD).hParent) then
+    if ShowParentMethods(U2, TOOTypeDef(TD).hParent) then
       Result := true;
-    if ShowMethods(U2,TD.Name^.GetStr,TOOTypeDef(TD).Fields) then
+    if ShowMethods(U2, TD.Name^.GetStr, TOOTypeDef(TD).Fields) then
       Result := true;
-  end ;
+  end;
 
 var
   i: Integer;
@@ -331,62 +382,68 @@ begin
   PutKW('queries');
   Writer.NLOfs := 2;
   NL;
-  for i:=1 to U.TypeCount do begin
-    TD := U.GetGlobalTypeDef(i,U1);
-    if TD=Nil then
+  for i := 1 to U.TypeCount do
+  begin
+    TD := U.GetGlobalTypeDef(i, U1);
+    if TD = Nil then
       Continue;
-    if (TD is TRecBaseDef)and((TD is TOOTypeDef)or(TD is TRecDef)) then begin
-      if U1<>U then begin
+    if (TD is TRecBaseDef) and ((TD is TOOTypeDef) or (TD is TRecDef)) then
+    begin
+      if U1 <> U then
+      begin
         PutS(U1.UnitName);
         PutCh('.');
-      end ;
+      end;
       PutS(TD.Name^.GetStr);
-      if qfFields in Queries then begin
+      if qfFields in Queries then
+      begin
         Hdr := '<FIELDS>';
         if TD is TOOTypeDef then
-          {if} ShowParentFields(U1,TOOTypeDef(TD).hParent) {then
+          {if}           ShowParentFields(U1, TOOTypeDef(TD).hParent) {then
             Hdr := '<FIELDS>'};
-        ShowFields(U1,Hdr,TRecBaseDef(TD).Fields);
-      end ;
-      if (qfVMT in Queries)and(TD is TOOTypeDef) then begin
-        ShowParentMethods(U1,TOOTypeDef(TD).hParent);
-        ShowMethods(U1,'<METHODS>',TOOTypeDef(TD).Fields);
-      end ;
+        ShowFields(U1, Hdr, TRecBaseDef(TD).Fields);
+      end;
+      if (qfVMT in Queries) and (TD is TOOTypeDef) then
+      begin
+        ShowParentMethods(U1, TOOTypeDef(TD).hParent);
+        ShowMethods(U1, '<METHODS>', TOOTypeDef(TD).Fields);
+      end;
       {
   VMCnt: TNDX;//number of virtual methods
       end ;}
       Writer.NLOfs := 2;
       NL;
-    end ;
-  end ;
-end ;
+    end;
+  end;
+end;
 
-
-function ReplaceStar(FNRes,FN: String): String;
+function ReplaceStar(FNRes, FN: string): string;
 var
   CP: PChar;
 begin
-  CP := StrScan(PChar(FNRes),'*');
-  if CP=Nil then begin
+  CP := StrScan(PChar(FNRes), '*');
+  if CP = Nil then
+  begin
     Result := FNRes;
     Exit;
-  end ;
-  if StrScan(CP+1,'*')<>Nil then
+  end;
+  if StrScan(CP + 1, '*') <> Nil then
     raise Exception.Create('2nd "*" is not allowed');
   FN := ExtractFilename(FN);
-  if (CP+1)^=#0 then begin
-    Result := Copy(FNRes,1,CP-PChar(FNRes))+ChangeFileExt(FN,'.int');
+  if (CP + 1)^ = #0 then
+  begin
+    Result := Copy(FNRes, 1, CP - PChar(FNRes)) + ChangeFileExt(FN, '.int');
     Exit;
   end;
-  Result := Copy(FNRes,1,CP-PChar(FNRes))+ChangeFileExt(FN,'')+Copy(FNRes,CP-PChar(FNRes)+2,MaxInt);
-end ;
+  Result := Copy(FNRes, 1, CP - PChar(FNRes)) + ChangeFileExt(FN, '') + Copy(FNRes, CP - PChar(FNRes) + 2, MaxInt);
+end;
 
 procedure ProcessExc(E: Exception; OutRedir: boolean);
 var
   ExcS: AnsiString;
 begin
-  ExcS := {$IFDEF UNICODE}AnsiStrings.{$ENDIF}Format('!!!%s: "%s"',[E.ClassName,E.Message]);
-  if Writer<>Nil then
+  ExcS := {$IFDEF UNICODE}AnsiStrings.{$ENDIF}Format('!!!%s: "%s"', [E.ClassName, E.Message]);
+  if Writer <> Nil then
     ReportExc(ExcS);
   {if TTextRec(FRes).Mode<>fmClosed then begin
     Writeln(FRes);
@@ -397,8 +454,7 @@ begin
     Writeln(ExcS);
 end;
 
-
-function ProcessUnit(FN: String; OutRedir: boolean): Integer;
+function ProcessUnit(FN: string; OutRedir: boolean): Integer;
 var
   U: TUnit;
 begin
@@ -407,29 +463,30 @@ begin
     FN := ExpandFileName(FN);
     U := Nil;
     try
-      U := GetDCUByName(FN,'',0,false{Will be ignored 'cause verRq=0},
-        dcuplWin32{Will be ignored 'cause verRq=0},0){TUnit.Create(FN)};
+      U := GetDCUByName(FN, '', 0, false{Will be ignored 'cause verRq=0}, dcuplWin32{Will be ignored 'cause verRq=0}, 0){TUnit.Create(FN)};
     finally
-      if U=Nil then
+      if U = Nil then
         U := MainUnit;
-      if U<>Nil then begin
+      if U <> Nil then
+      begin
         U.Show;
-        if Queries<>[] then
-          QueryUnit(U,Queries);
-      end ;
-    end ;
+        if Queries <> [] then
+          QueryUnit(U, Queries);
+      end;
+    end;
   except
-    on E: Exception do begin
-      ProcessExc(E,OutRedir);
+    on E: Exception do
+    begin
+      ProcessExc(E, OutRedir);
       Result := 1;
-    end ;
-  end ;
+    end;
+  end;
 end;
 
-function ProcessFile(const FN: String): integer {ErrorLevel};
+function ProcessFile(const FN: string): integer {ErrorLevel};
 var
-  NS,Ext,UnitFN: String;
-  IsDCP,OutRedir: boolean;
+  NS, Ext, UnitFN: string;
+  IsDCP, OutRedir: boolean;
  // CP: PChar;
   Pkg: TDCPackage;
   i: Integer;
@@ -437,24 +494,28 @@ var
 begin
   Result := 0;
   OutRedir := false;
-  if FNRes='-' then
+  if FNRes = '-' then
     FNRes := ''
-  else begin
+  else
+  begin
     Writeln{(StdErr)};
-    Writeln('File: "',FN,'"');
+    Writeln('File: "', FN, '"');
     NS := ExtractFileNamePkg(FN);
     {CP := StrScan(PChar(NS),PkgSep);
     if CP<>Nil then
       NS := StrPas(CP+1);}
-    if FNRes='' then
-      FNRes := ExtractFilePath(FN)+ChangeFileExt(NS,DefaultExt[OutFmt])
+    if FNRes = '' then
+      FNRes := ExtractFilePath(FN) + ChangeFileExt(NS, DefaultExt[OutFmt])
     else
-      FNRes := ReplaceStar(FNRes,FN);
-    Writeln('Result: "',FNRes,'"');
+      FNRes := ReplaceStar(FNRes, FN);
+
+    if FOutPutFile <> '' then
+      FNRes := FOutPutFile;
+    Writeln('Result: "', FNRes, '"');
 //    CloseFile(Output);
     Flush(Output);
     OutRedir := true;
-  end ;
+  end;
   IsDCP := IsDCPName(FN);
   Writer := Nil;
   {AssignFile(FRes,FNRes);
@@ -465,43 +526,47 @@ begin
       Writer := InitOut(FNRes);
       try
         if not IsDCP then
-          Result := ProcessUnit(FN,OutRedir)
-        else begin
-          Pkg := LoadPackage(FN,true{IsMain});
-          if Pkg=Nil then
-            raise Exception.CreateFmt('Error loading package "%s"',[FN]);
+          Result := ProcessUnit(FN, OutRedir)
+        else
+        begin
+          Pkg := LoadPackage(FN, true{IsMain});
+          if Pkg = Nil then
+            raise Exception.CreateFmt('Error loading package "%s"', [FN]);
           Ext := ExtractFileExt(FN);
-          if Length(Ext)>=4 then
+          if Length(Ext) >= 4 then
             Ext[4] := 'u';
-          for i:=0 to Pkg.Count-1 do begin
-            UnitFN := FN+PkgSep+Pkg[i]+Ext; //It is easier to find it by name
+          for i := 0 to Pkg.Count - 1 do
+          begin
+            UnitFN := FN + PkgSep + Pkg[i] + Ext; //It is easier to find it by name
             MainUnit := Nil;
-            if ProcessUnit(UnitFN,OutRedir)<>0 then
+            if ProcessUnit(UnitFN, OutRedir) <> 0 then
               Result := 1;
             NL;
           end;
         end;
       finally
         FreeDCU;
-      end ;
+      end;
     except
-      on E: Exception do begin //Catch InitOut or FreeDCU errors
-        ProcessExc(E,OutRedir);
+      on E: Exception do
+      begin //Catch InitOut or FreeDCU errors
+        ProcessExc(E, OutRedir);
         Result := 1;
-      end ;
-    end ;
+      end;
+    end;
   finally
-    if OutRedir then begin
-      Writeln(Format('Total %d lines generated.',[Writer.OutLineNum]));
+    if OutRedir then
+    begin
+      Writeln(Format('Total %d lines generated.', [Writer.OutLineNum]));
       Close(Output);
-    end ;
+    end;
     Writer.Free;
     {if TTextRec(FRes).Mode<>fmClosed then begin
       DoneOut;
       Close(FRes);
     end ;}
-  end ;
-end ;
+  end;
+end;
 
 begin
   {$IFDEF CONDITIONALEXPRESSIONS}
@@ -509,10 +574,12 @@ begin
   FormatSettings. //Required since XE6
   {$IFEND}
   {$ENDIF}
-  DecimalSeparator := '.';
-  if not ProcessParms then begin
-    Writeln('Call this program with -? or -h parameters for help on usage.');//WriteUsage;
+DecimalSeparator := '.';
+  if not ProcessParms then
+  begin
+    Writeln('Call this program with -? or -h parameters for help on usage.'); //WriteUsage;
     Exit;
-  end ;
+  end;
   Halt(ProcessFile(DCUName));
 end.
+
